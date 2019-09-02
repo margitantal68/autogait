@@ -67,7 +67,7 @@ def custom_loss(layer):
     # Return a function
     return loss
 
-
+# Auxiliary function for data augmentation
 def add_random(x):
     return x -0.2 + 0.4* random.random()
 
@@ -81,7 +81,7 @@ def data_augmentation(data, ydata):
     ydata = np.concatenate((ydata, ydata), axis=0)
     return data, ydata
 
-# Create training dataset for ZJU - GaitAcc
+# Create training dataset for autoencoder using the ZJU-GaitAcc dataset
 # Users [1, 103)
 # recordings [1, 7)
 # 
@@ -101,7 +101,8 @@ def create_zju_training_dataset(augmentation = False):
     print('ZJU GaitAcc dataset - Data shape: '+str(data.shape)+' augmentation: '+ str(augmentation))
     return data, ydata
 
-# Create 
+# create training set for autoencoder using the IDNet dataset
+# 
 def create_idnet_training_dataset():
     print('Training autoencoder  - IDNet dataset')
     data = load_IDNet_data()
@@ -111,10 +112,13 @@ def create_idnet_training_dataset():
 
     
 
-#
+# Automatic features using the autoencoder
 # ZJU-GaitAcc
-# Extracts and saves features for session_1 and session_2
-# users: [start, stop)
+# Extract and save features for session_1 and session_2
+# 
+# encoder: the encoder part of a trained autoencoder
+# modeltype: used for data shape
+# users: [start_user, stop_user)
 # Output: session_1.csv, session_2.csv
 # 
 def extract_and_save_features(encoder, modeltype, start_user, stop_user):
@@ -146,9 +150,9 @@ def extract_and_save_features(encoder, modeltype, start_user, stop_user):
         # Save data into a CSV file
         df3.to_csv('./'+FEAT_DIR + '/'+session + ".csv", header=False, index=False)
 
-# [start_user, stop_user)
-# [start_recording, stop_recording)
-# Extracts features and normalizes them
+# Users: [start_user, stop_user)
+# Recordings: [start_recording, stop_recording)
+# Extract and normalize features 
 # 
 def extract_features(encoder, session, modeltype, start_user, stop_user, start_recording, stop_recording):
     feature_type = FeatureType.AUTOMATIC
