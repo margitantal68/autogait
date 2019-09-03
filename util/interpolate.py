@@ -6,17 +6,17 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 from scipy import interpolate
 
+from const import IDNET_BASE_FOLDER
 
 def linear_interpolation(input_file, output_file):
     df = pd.read_csv(input_file, delimiter='\t')
-    
-    t = df['accelerometer_timestamp']	
+
+    t = df['accelerometer_timestamp']
     x = df['accelerometer_x_data']
     y = df['accelerometer_y_data']
-    z = df['accelerometer_z_data'] 
+    z = df['accelerometer_z_data']
 
     N = len(t)
 
@@ -32,21 +32,16 @@ def linear_interpolation(input_file, output_file):
     fy = interpolate.interp1d(t, y, fill_value="extrapolate")
     fz = interpolate.interp1d(t, z, fill_value="extrapolate")
 
-
-
     xnew = fx(tnew)   # use interpolation function returned by `interp1d`
     ynew = fy(tnew)   # use interpolation function returned by `interp1d`
     znew = fz(tnew)   # use interpolation function returned by `interp1d`
-
    
     xinterp = np.array(xnew)
     yinterp = np.array(ynew)
     zinterp = np.array(znew)
 
-    
     dataset = pd.DataFrame({'t': tnew, 'x': xinterp, 'y': yinterp, 'z': zinterp}, columns=['t', 'x', 'y', 'z'])
     pd.DataFrame.to_csv(dataset, path_or_buf = output_file, index = False)
-
 
 def test_interpolation():
     filename = 'c:/_DATA/_DIPLOMADOLGOZATOK/2018/_ACCENTURE_STUDENT_RESEARCH/GaitBiometrics/_DATA/IDNet/IDNET/u002_w004/u002_w004_accelerometer.log'
@@ -58,7 +53,6 @@ def test_interpolation():
     y = df['accelerometer_y_data']
     z = df['accelerometer_z_data'] 
 
-
     N = len(t)
     # define the time points of interest
     fs = 100  # sampling rate
@@ -66,7 +60,7 @@ def test_interpolation():
     T_nano = T * 1000000000
     tnew = np.arange(t[0], t[ N-1], T_nano)
 
-    print( str(len(t)) + ", " + str(len(tnew)) ) 
+    print(str(len(t)) + ", " + str(len(tnew))) 
 
     fx = interpolate.interp1d(t, x)
     fy = interpolate.interp1d(t, y)
@@ -79,11 +73,9 @@ def test_interpolation():
     # Number of points for plotting
     M = 16
 
-
     xnew = fx(tnew)   # use interpolation function returned by `interp1d`
     ynew = fy(tnew)   # use interpolation function returned by `interp1d`
     znew = fz(tnew)   # use interpolation function returned by `interp1d`
-
 
     plt.plot(t[0:M-1], x[0:M-1], 'o', tnew[0:M-1], xnew[0:M-1], '-')
     plt.plot(t[0:M-1], y[0:M-1], 'o', tnew[0:M-1], ynew[0:M-1], '-')
@@ -91,8 +83,6 @@ def test_interpolation():
 
     plt.show()
     return
-
-
 
 def interpolate_all(path):
     INTERPOLATED_FOLDER = 'IDNet_interpolated1'
@@ -123,6 +113,5 @@ def interpolate_all(path):
 
 
 # 3. interpolate all files in a folder
-path = IDNET_BASE_FOLDER = 'c:\\_DATA\\_DIPLOMADOLGOZATOK\\2018\\_ACCENTURE_STUDENT_RESEARCH\\GaitBiometrics\\_DATA\\IDNet\\IDNET'
-print( path )
-interpolate_all( path )
+print(IDNET_BASE_FOLDER)
+interpolate_all(IDNET_BASE_FOLDER)

@@ -4,13 +4,12 @@ def average_absolute_difference(x, avg_x):
     y = np.abs(x - avg_x)
     return np.mean(y)
 
-
 def zero_crossing_rate(x):
     counter = 0
-    for i in range(1,len(x)):
-        if( (x[i-1] <= 0 and x[i] >0) or (x[i-1]>=0 and x[i]<0) ):
-            counter = counter +1 
-    return counter/len(x)
+    for i in range(1, len(x)):
+        if (x[i-1] <= 0 and x[i] > 0) or (x[i-1] >= 0 and x[i] < 0):
+            counter = counter + 1
+    return counter / len(x)
 
     #zero_crossings2 = np.where(np.diff(np.sign(x)))[0]  
     #return len(zero_crossings2)/len(x)
@@ -21,7 +20,7 @@ def zero_crossing_rate(x):
 def feature_extraction(data):
     #data = data.reshape(num_frames, SEQUENCE_LENGTH, num_features)
     print(np.shape(data))
-    frames, rows, columns = np.shape(data)
+    frames, _rows, _columns = np.shape(data)
     num_features = 59
     result = np.zeros((frames, num_features))
     # Extract 59 features from each row (512 values)
@@ -30,7 +29,7 @@ def feature_extraction(data):
         ay = data[frame, :, 1]
         az = data[frame, :, 2]
         am = data[frame, :, 3]
-        
+
         min_ax = np.min(ax)
         min_ay = np.min(ay)
         min_az = np.min(az)
@@ -67,23 +66,23 @@ def feature_extraction(data):
         result[frame, 14] = aad_az
         result[frame, 15] = aad_am
 
-        zcr_ax = zero_crossing_rate( ax )
-        zcr_ay = zero_crossing_rate( ay )
-        zcr_az = zero_crossing_rate( az )
+        zcr_ax = zero_crossing_rate(ax)
+        zcr_ay = zero_crossing_rate(ay)
+        zcr_az = zero_crossing_rate(az)
         result[frame, 16] = zcr_ax
         result[frame, 17] = zcr_ay
         result[frame, 18] = zcr_az
 
-        histo_ax, bin_edges = np.histogram(ax, 10, (-1.5,1.5), density=True)
-        histo_ay, bin_edges = np.histogram(ay, 10, (-1.5,1.5), density=True)
-        histo_az, bin_edges = np.histogram(az, 10, (-1.5,1.5), density=True)
-        histo_am, bin_edges = np.histogram(am, 10, (-2,2), density=True)
+        histo_ax, _bin_edges = np.histogram(ax, 10, (-1.5, 1.5), density=True)
+        histo_ay, _bin_edges = np.histogram(ay, 10, (-1.5, 1.5), density=True)
+        histo_az, _bin_edges = np.histogram(az, 10, (-1.5, 1.5), density=True)
+        histo_am, _bin_edges = np.histogram(am, 10, (-2.0, 2.0), density=True)
         for i in range(0, 10):
-            result[frame, 19+i] = histo_ax[i]
+            result[frame, 19 + i] = histo_ax[i]
         for i in range(0, 10):
-            result[frame, 29+i] = histo_ay[i]
+            result[frame, 29 + i] = histo_ay[i]
         for i in range(0, 10):
-            result[frame, 39+i] = histo_az[i]
+            result[frame, 39 + i] = histo_az[i]
         for i in range(0, 10):
-            result[frame, 49+i] = histo_am[i]
+            result[frame, 49 + i] = histo_am[i]
     return result

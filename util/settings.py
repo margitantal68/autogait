@@ -1,14 +1,14 @@
-from util.const import FeatureType, AUTOENCODER_MODEL_TYPE, MEASUREMENT_PROTOCOL
+from util.const import FeatureType, AutoencoderModelType, MeasurementProtocol
 
 ##
 #  Modify the values below to test the model with different parameters.
 #
 
 
-
+##
 # Type of protocol used for measurements
 #
-MEASUREMENT_PROTOCOL_TYPE = MEASUREMENT_PROTOCOL.SAME_DAY
+MEASUREMENT_PROTOCOL_TYPE = MeasurementProtocol.SAME_DAY
 
 ##
 #  MANUAL - Use the 59 time-based features (these are already extracted)
@@ -24,7 +24,7 @@ FEATURE_TYPE = FeatureType.AUTOMATIC
 #
 # DENSE - Fully Connected layers
 #
-AUTOENCODER_TYPE = AUTOENCODER_MODEL_TYPE.LSTM
+AUTOENCODER_TYPE = AutoencoderModelType.LSTM
 
 ##
 # If the features are already extracted using a given
